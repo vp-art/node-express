@@ -3,6 +3,7 @@ const http = require('http');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
+const dishRouter = require('./routes/dishRouter');
 const hostname = 'localhost';
 const port = 3000;
 
@@ -10,53 +11,30 @@ const app = express();
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 
-app.all('/dishes', (req, res, next) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    next();
-});
-// /dishes start
-app.get('/dishes', (res, req, next) => {
-    res.end('Will send all the dishes to you');
-});
+app.use('/dishes', dishRouter);
 
-app.post('/dishes', (res, req, next) => {
-    res.end('Will add the dish: ' + req.body.name + 
-        ' with details: ' + req.body.description);
-});
+// // /dishes/:dishId start
+// app.get('/dishes/:dishId', (res, req, next) => {
+//     res.end('Will send details of the dish: ' 
+//         + req.params.dishId + ' to you!');
+// });
 
-app.put('/dishes', (res, req, next) => {
-    res.statusCode = 403
-    res.end('PUT operation not supported on /dishes');
-});
+// app.post('/dishes/:dishId', (res, req, next) => {
+//     res.statusCode = 403
+//     res.end('POST operation not supported on /dishes/' 
+//         +req.params.dishId);
+// });
 
-app.delete('/dishes', (res, req, next) => {
-    res.end('Deleting all the dishes to you');
-});
-// /dishes end
+// app.put('/dishes/:dishId', (res, req, next) => {
+//     res.write('Updating the dish: ' + req.params.dishId);
+//     res.end('Will update the dish: '+req.body.name + 
+//         ' with details: '+req.body.description);
+// });
 
-// /dishes/:dishId start
-app.get('/dishes/:dishId', (res, req, next) => {
-    res.end('Will send details of the dish: ' 
-        + req.params.dishId + ' to you!');
-});
-
-app.post('/dishes/:dishId', (res, req, next) => {
-    res.statusCode = 403
-    res.end('POST operation not supported on /dishes/' 
-        +req.params.dishId);
-});
-
-app.put('/dishes/:dishId', (res, req, next) => {
-    res.write('Updating the dish: ' + req.params.dishId);
-    res.end('Will update the dish: '+req.body.name + 
-        ' with details: '+req.body.description);
-});
-
-app.delete('/dishes/:dishId', (res, req, next) => {
-    res.end('Deleting dish: ' + req.params.dishId);
-});
-// /dishes/:dishId end
+// app.delete('/dishes/:dishId', (res, req, next) => {
+//     res.end('Deleting dish: ' + req.params.dishId);
+// });
+// // /dishes/:dishId end
 
 app.use(express.static(__dirname + '/public'));
 
